@@ -6,11 +6,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
 import { cn } from "@/lib/utils";
 import { loginSchema } from "@/lib/validations/auth";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 
 type LoginFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -39,11 +40,9 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
       <h1 className="font-medium text-3xl hidden lg:block mb-4">Sign In</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4">
-          <div className="grid gap-2">
-            <div className="grid gap-1">
-              <Label className="sr-only" htmlFor="identifier">
-                Identifier
-              </Label>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="identifier">Identifier</Label>
               <Input
                 id="identifier"
                 placeholder="name@example.com"
@@ -60,13 +59,11 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
                 </p>
               )}
             </div>
-            <div className="grid gap-1">
-              <Label className="sr-only" htmlFor="password">
-                Password
-              </Label>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
-                placeholder="name@example.com"
+                placeholder="password"
                 type="password"
                 autoCapitalize="none"
                 autoComplete="off"

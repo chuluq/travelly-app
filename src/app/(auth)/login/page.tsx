@@ -20,7 +20,7 @@ export default function LoginPage() {
               <p className="text-xl font-medium">Lorem Ipsum is simply</p>
             </div>
             <div className="flex flex-col">
-              <p className="text-sm">If you don’t have an account register</p>
+              <p className="text-sm">If you don’t have an account</p>
               <p className="text-sm">
                 You can{" "}
                 <Link href="/register" className="text-blue-700 font-semibold">

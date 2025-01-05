@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
 import { ArticleList } from "@/components/articles/list";
+import { DashboardShell } from "@/components/shell";
 // import { API_URL, article } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -14,8 +15,8 @@ export default async function ArticlePage() {
   // console.log("articles", articles);
 
   return (
-    <div>
+    <DashboardShell>
       <ArticleList />
-    </div>
+    </DashboardShell>
   );
 }

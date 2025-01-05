@@ -39,3 +39,17 @@ export type DashboardConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
 };
+
+export type Pagination = {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
+};
+
+export type DataPagination<T> = {
+  data?: T[];
+  meta: {
+    pagination: Pagination;
+  };
+};

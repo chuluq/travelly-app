@@ -1,15 +1,17 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import React from "react";
 import { useFormState } from "react-dom";
-import { Loader2 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-import { cn } from "@/lib/utils";
 import { signIn } from "@/actions/auth";
+import { cn } from "@/lib/utils";
 
 type LoginFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -18,6 +20,14 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
 
   return (
     <div className={cn(className)} {...props}>
+      <Alert
+        variant="destructive"
+        className={cn("mb-4", !state?.message && "hidden")}
+      >
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{state?.message}</AlertDescription>
+      </Alert>
       <h1 className="font-medium text-3xl hidden lg:block mb-4">Sign In</h1>
       <form action={formAction}>
         <div className="grid gap-4">
@@ -36,7 +46,7 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
               />
               {state?.errors?.identifier && (
                 <p className="px-1 text-xs text-red-600">
-                  {state.errors.identifier}
+                  {state.errors.identifier.join(", ")}
                 </p>
               )}
             </div>
@@ -54,7 +64,7 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
               />
               {state?.errors?.password && (
                 <p className="px-1 text-xs text-red-600">
-                  {state.errors.password}
+                  {state.errors.password.join(", ")}
                 </p>
               )}
             </div>
@@ -63,6 +73,7 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
             {pending && <Loader2 className="mr-2 size-4 animate-spin" />}
             Login
           </Button>
+          <p className="px-1 text-xs text-red-600">{state?.message}</p>
         </div>
       </form>
     </div>

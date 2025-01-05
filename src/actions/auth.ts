@@ -10,7 +10,17 @@ import {
   sessionOptions,
 } from "@/lib/session";
 import { API_URL } from "@/lib/utils";
-import { FormState, LoginSchema } from "@/lib/validations/auth";
+import { LoginSchema } from "@/lib/validations/auth";
+
+export type FormState =
+  | {
+      errors?: {
+        identifier?: string[];
+        password?: string[];
+      };
+      message?: string;
+    }
+  | undefined;
 
 export async function getSession() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -42,23 +52,33 @@ export async function signIn(state: FormState, formData: FormData) {
   // Prepare data for insertion into database
   const { identifier, password } = validatedFields.data;
 
-  const response = await fetch(`${API_URL}/api/auth/local`, {
-    method: "POST",
-    body: JSON.stringify({ identifier, password }),
-    headers: { "Content-Type": "application/json" },
-  });
-  const user = await response.json();
+  try {
+    const response = await fetch(`${API_URL}/api/auth/local`, {
+      method: "POST",
+      body: JSON.stringify({ identifier, password }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await response.json();
 
-  if (!user) {
-    return { message: "An error occurred while creating your account." };
+    if (!response.ok || data.error) {
+      state = {
+        ...state,
+        message: data.error.message,
+      };
+      return { message: "An error occurred while creating your account." };
+    }
+
+    session.isAuthenticated = true;
+    session.accessToken = data.jwt;
+    session.userId = data.user.id;
+
+    // Create user session
+    await session.save();
+    // Redirect user
+    redirect("/dashboard");
+  } catch (error) {
+    throw new Error(
+      `An error occurred while creating your account. ${JSON.stringify(error)}`
+    );
   }
-
-  session.isAuthenticated = true;
-  session.accessToken = user.jwt;
-  session.userId = user.user.id;
-
-  // Create user session
-  await session.save();
-  // Redirect user
-  redirect("/dashboard");
 }

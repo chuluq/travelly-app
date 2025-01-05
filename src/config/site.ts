@@ -8,6 +8,6 @@ export const siteConfig: SiteConfig = {
   ogImage: "https://travelly.com/og.jpg",
   links: {
     twitter: "https://twitter.com/travelly",
-    github: "https://github.com/travelly",
+    github: "https://github.com/chuluq/travelly-app",
   },
 };

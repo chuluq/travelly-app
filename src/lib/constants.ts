@@ -4,6 +4,7 @@ export const secretKey = process.env.SESSION_SECRET;
 export const auth = {
   login: "auth/local",
   register: "auth/local/register",
+  getMe: "users/me",
 };
 
 export const article = {

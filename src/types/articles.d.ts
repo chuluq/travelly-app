@@ -21,6 +21,7 @@ export type User = {
   documentId: string;
   username: string;
   email: string;
+  image?: string | null;
   provider: string;
   confirmed: boolean;
   blocked: boolean;

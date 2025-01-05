@@ -1,10 +1,10 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
-import React from "react";
-import { useFormState } from "react-dom";
 import { AlertCircle } from "lucide-react";
+import React from "react";
+import { useFormState, useFormStatus } from "react-dom";
 
+import { Icons } from "@/components/icons";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 type LoginFormProps = React.HTMLAttributes<HTMLDivElement>;
 
 export const LoginForm = ({ className, ...props }: LoginFormProps) => {
-  const [state, formAction, pending] = useFormState(signIn, undefined);
+  const [state, formAction] = useFormState(signIn, undefined);
 
   return (
     <div className={cn(className)} {...props}>
@@ -42,7 +42,6 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
                 autoCapitalize="none"
                 autoComplete="email"
                 autoCorrect="off"
-                disabled={pending}
               />
               {state?.errors?.identifier && (
                 <p className="px-1 text-xs text-red-600">
@@ -60,7 +59,6 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect="off"
-                disabled={pending}
               />
               {state?.errors?.password && (
                 <p className="px-1 text-xs text-red-600">
@@ -69,12 +67,19 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
               )}
             </div>
           </div>
-          <Button type="submit" disabled={pending}>
-            {pending && <Loader2 className="mr-2 size-4 animate-spin" />}
-            Login
-          </Button>
+          <SubmitButton />
         </div>
       </form>
     </div>
   );
 };
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending && <Icons.loading className="mr-2 size-4 animate-spin" />}
+      Login
+    </Button>
+  );
+}

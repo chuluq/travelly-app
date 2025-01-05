@@ -1,3 +1,6 @@
+import { redirect } from "next/navigation";
+
+import { getSession } from "@/actions/auth";
 import { MainNav } from "@/components/main-nav";
 import { dashboardConfig } from "@/config/dashboard";
 
@@ -5,10 +8,14 @@ interface DashboardLayoutProps {
   children?: React.ReactNode;
 }
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  /**
-   * @todo check login status
-   */
+export default async function DashboardLayout({
+  children,
+}: DashboardLayoutProps) {
+  const session = await getSession();
+
+  if (!session.accessToken) {
+    redirect("/login");
+  }
 
   return (
     <div className="flex min-h-screen flex-col space-y-6">

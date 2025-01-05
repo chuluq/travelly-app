@@ -52,33 +52,31 @@ export async function signIn(state: FormState, formData: FormData) {
   // Prepare data for insertion into database
   const { identifier, password } = validatedFields.data;
 
-  try {
-    const response = await fetch(`${API_URL}/api/auth/local`, {
-      method: "POST",
-      body: JSON.stringify({ identifier, password }),
-      headers: { "Content-Type": "application/json" },
-    });
-    const data = await response.json();
+  const response = await fetch(`${API_URL}/api/auth/local`, {
+    method: "POST",
+    body: JSON.stringify({ identifier, password }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await response.json();
 
-    if (!response.ok || data.error) {
-      state = {
-        ...state,
-        message: data.error.message,
-      };
-      return { message: "An error occurred while creating your account." };
-    }
-
-    session.isAuthenticated = true;
-    session.accessToken = data.jwt;
-    session.userId = data.user.id;
-
-    // Create user session
-    await session.save();
-    // Redirect user
-    redirect("/dashboard");
-  } catch (error) {
-    throw new Error(
-      `An error occurred while creating your account. ${JSON.stringify(error)}`
-    );
+  if (!response.ok || data.error) {
+    state = { ...state, message: data.error.message };
+    return { message: "An error occurred while creating your account." };
   }
+
+  session.isAuthenticated = true;
+  session.accessToken = data.jwt;
+  session.userId = data.user.id;
+  state = { ...state, message: "" };
+
+  // Create user session
+  await session.save();
+  // Redirect user
+  redirect("/dashboard");
 }
+
+export const signOut = async () => {
+  const session = await getSession();
+  session.destroy();
+  redirect("/login");
+};

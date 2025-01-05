@@ -7,7 +7,7 @@ import { UserAccountNav } from "@/components/user-account-nav";
 
 import { getSession } from "@/actions/auth";
 import { dashboardConfig } from "@/config/dashboard";
-import { API_URL, auth } from "@/lib/constants";
+import { API_URL, auth } from "@/config/routes";
 import { CounterStoreProvider } from "@/providers/counter-store-provider";
 import { User } from "@/types/articles";
 

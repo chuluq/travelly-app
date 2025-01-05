@@ -9,7 +9,7 @@ import {
   defaultSession,
   sessionOptions,
 } from "@/lib/session";
-import { API_URL, auth } from "@/lib/constants";
+import { API_URL, auth } from "@/config/routes";
 import { LoginSchema, RegisterSchema } from "@/lib/validations/auth";
 
 export type LoginFormState =

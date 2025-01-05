@@ -2,7 +2,7 @@
 
 import { Article } from "@/types/articles";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 export const columns: ColumnDef<Article>[] = [
   {
@@ -68,15 +69,7 @@ export const columns: ColumnDef<Article>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Title
-          <ArrowUpDown className="ml-2 size-4" />
-        </Button>
-      );
+      return <DataTableColumnHeader column={column} title="Title" />;
     },
   },
   {

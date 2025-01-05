@@ -1,6 +1,6 @@
 "use client";
 
-import { useCounterStore } from "@/providers/articles-store-provider";
+import { useCounterStore } from "@/providers/counter-store-provider";
 
 export const ArticleList = () => {
   const { count, incrementCount, decrementCount } = useCounterStore(

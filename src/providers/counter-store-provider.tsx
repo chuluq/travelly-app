@@ -7,7 +7,7 @@ import {
   type CounterStore,
   createCounterStore,
   initCounterStore,
-} from "@/stores/article-store";
+} from "@/stores/counter-store";
 
 export type CounterStoreApi = ReturnType<typeof createCounterStore>;
 

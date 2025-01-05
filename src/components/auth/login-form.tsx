@@ -73,7 +73,6 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
             {pending && <Loader2 className="mr-2 size-4 animate-spin" />}
             Login
           </Button>
-          <p className="px-1 text-xs text-red-600">{state?.message}</p>
         </div>
       </form>
     </div>

@@ -9,7 +9,7 @@ import { getSession } from "@/actions/auth";
 import { dashboardConfig } from "@/config/dashboard";
 import { API_URL, auth } from "@/config/routes";
 import { CounterStoreProvider } from "@/providers/counter-store-provider";
-import { User } from "@/types/articles";
+import { User } from "@/types/user";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -47,6 +47,7 @@ export default async function DashboardLayout({
               user={{
                 username: user.username ?? "username",
                 email: user.email ?? "user@example.com",
+                image: null,
               }}
             />
           </div>

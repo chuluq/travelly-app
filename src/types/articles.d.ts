@@ -1,4 +1,6 @@
-import { DataPagination } from ".";
+import { DataPagination } from "@/types";
+import { Comment } from "@/types/comment";
+import { User } from "@/types/user";
 
 export type Article = {
   id: number;
@@ -14,31 +16,6 @@ export type Article = {
   category: number | null;
   comments: Comment[];
   localizations: string[];
-};
-
-export type User = {
-  id: number;
-  documentId: string;
-  username: string;
-  email: string;
-  image?: string | null;
-  provider: string;
-  confirmed: boolean;
-  blocked: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt: Date;
-  locale: null;
-};
-
-export type Comment = {
-  id: number;
-  documentId: string;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt: Date;
-  locale: null;
 };
 
 export type ArticlePagination = DataPagination<Article>;

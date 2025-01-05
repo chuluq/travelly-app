@@ -2,11 +2,10 @@
 
 import { AlertCircle } from "lucide-react";
 import React from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 
-import { Icons } from "@/components/icons";
+import { SubmitButton } from "@/components/submit-button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -67,19 +66,9 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
               )}
             </div>
           </div>
-          <SubmitButton />
+          <SubmitButton text="Login" />
         </div>
       </form>
     </div>
   );
 };
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending}>
-      {pending && <Icons.loading className="mr-2 size-4 animate-spin" />}
-      Login
-    </Button>
-  );
-}

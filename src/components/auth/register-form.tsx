@@ -1,61 +1,50 @@
 "use client";
 
+import { AlertCircle } from "lucide-react";
 import React from "react";
-import { Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useFormState } from "react-dom";
 
-import { Label } from "@/components/ui/label";
+import { SubmitButton } from "@/components/submit-button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
+import { signUp } from "@/actions/auth";
 import { cn } from "@/lib/utils";
-import { registerSchema } from "@/lib/validations/auth";
 
 type RegisterFormProps = React.HTMLAttributes<HTMLDivElement>;
 
-type FormData = z.infer<typeof registerSchema>;
-
 export const RegisterForm = ({ className, ...props }: RegisterFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(registerSchema),
-  });
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-  async function onSubmit(data: FormData) {
-    setIsLoading(true);
-
-    console.log(data);
-
-    setIsLoading(false);
-  }
+  const [state, formAction] = useFormState(signUp, undefined);
 
   return (
     <div className={cn(className)} {...props}>
+      <Alert
+        variant="destructive"
+        className={cn("mb-4", !state?.message && "hidden")}
+      >
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{state?.message}</AlertDescription>
+      </Alert>
       <h1 className="font-medium text-3xl hidden lg:block mb-4">Sign In</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form action={formAction}>
         <div className="grid gap-4">
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 placeholder="name@example.com"
                 type="email"
                 autoCapitalize="none"
                 autoComplete="email"
                 autoCorrect="off"
-                disabled={isLoading}
-                {...register("email")}
               />
-              {errors.email && (
+              {state?.errors?.email && (
                 <p className="px-1 text-xs text-red-600">
-                  {errors.email.message}
+                  {state?.errors?.email.join(", ")}
                 </p>
               )}
             </div>
@@ -63,17 +52,16 @@ export const RegisterForm = ({ className, ...props }: RegisterFormProps) => {
               <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
+                name="username"
                 placeholder="johndoe"
                 type="text"
                 autoCapitalize="none"
                 autoComplete="username"
                 autoCorrect="off"
-                disabled={isLoading}
-                {...register("username")}
               />
-              {errors.username && (
+              {state?.errors?.username && (
                 <p className="px-1 text-xs text-red-600">
-                  {errors.username.message}
+                  {state?.errors?.username.join(", ")}
                 </p>
               )}
             </div>
@@ -81,25 +69,21 @@ export const RegisterForm = ({ className, ...props }: RegisterFormProps) => {
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
+                name="password"
                 placeholder="password"
                 type="password"
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect="off"
-                disabled={isLoading}
-                {...register("password")}
               />
-              {errors.password && (
+              {state?.errors?.password && (
                 <p className="px-1 text-xs text-red-600">
-                  {errors.password.message}
+                  {state?.errors?.password.join(", ")}
                 </p>
               )}
             </div>
           </div>
-          <Button disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
-            Register
-          </Button>
+          <SubmitButton text="Register" />
         </div>
       </form>
     </div>

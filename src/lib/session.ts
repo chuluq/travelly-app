@@ -1,5 +1,5 @@
 import { SessionOptions } from "iron-session";
-import { secretKey } from "./utils";
+import { secretKey } from "./constants";
 
 export interface SessionData {
   userId?: string;

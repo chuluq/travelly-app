@@ -9,13 +9,24 @@ import {
   defaultSession,
   sessionOptions,
 } from "@/lib/session";
-import { API_URL } from "@/lib/utils";
-import { LoginSchema } from "@/lib/validations/auth";
+import { API_URL, auth } from "@/lib/constants";
+import { LoginSchema, RegisterSchema } from "@/lib/validations/auth";
 
-export type FormState =
+export type LoginFormState =
   | {
       errors?: {
         identifier?: string[];
+        password?: string[];
+      };
+      message?: string;
+    }
+  | undefined;
+
+export type RegisterFormState =
+  | {
+      errors?: {
+        email?: string[];
+        username?: string[];
         password?: string[];
       };
       message?: string;
@@ -33,7 +44,7 @@ export async function getSession() {
   return session;
 }
 
-export async function signIn(state: FormState, formData: FormData) {
+export async function signIn(state: LoginFormState, formData: FormData) {
   const session = await getSession();
 
   // Validate form fields
@@ -52,7 +63,7 @@ export async function signIn(state: FormState, formData: FormData) {
   // Prepare data for insertion into database
   const { identifier, password } = validatedFields.data;
 
-  const response = await fetch(`${API_URL}/api/auth/local`, {
+  const response = await fetch(`${API_URL}/api/${auth.login}`, {
     method: "POST",
     body: JSON.stringify({ identifier, password }),
     headers: { "Content-Type": "application/json" },
@@ -60,19 +71,56 @@ export async function signIn(state: FormState, formData: FormData) {
   const data = await response.json();
 
   if (!response.ok || data.error) {
-    state = { ...state, message: data.error.message };
-    return { message: "An error occurred while creating your account." };
+    return {
+      message:
+        data.error.message ??
+        "An error occurred while signing in your account.",
+    };
   }
 
   session.isAuthenticated = true;
   session.accessToken = data.jwt;
   session.userId = data.user.id;
-  state = { ...state, message: "" };
 
   // Create user session
   await session.save();
   // Redirect user
   redirect("/dashboard");
+}
+
+export async function signUp(state: RegisterFormState, formData: FormData) {
+  // Validate form fields
+  const validatedFields = RegisterSchema.safeParse({
+    email: formData.get("email"),
+    username: formData.get("username"),
+    password: formData.get("password"),
+  });
+
+  // If any form fields are invalid, return early
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+  // Prepare data for insertion into database
+  const { email, username, password } = validatedFields.data;
+
+  const response = await fetch(`${API_URL}/api/${auth.register}`, {
+    method: "POST",
+    body: JSON.stringify({ email, username, password }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await response.json();
+
+  if (!response.ok || data.error) {
+    return {
+      message:
+        data.error.message ?? "An error occurred while creating your account.",
+    };
+  }
+
+  // Redirect user
+  redirect("/login");
 }
 
 export const signOut = async () => {

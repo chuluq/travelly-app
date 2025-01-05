@@ -1,14 +1,22 @@
 import { type Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/components/auth/login-form";
+import { getSession } from "@/actions/auth";
 
 export const metadata: Metadata = {
   title: "Login",
   description: "Login to your account",
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await getSession();
+
+  if (session.isAuthenticated) {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="container flex h-screen w-screen flex-col">
       <div className="flex flex-col pt-[18px] px-7 pb-12 space-y-10 lg:space-y-40">

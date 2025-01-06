@@ -63,7 +63,7 @@ export async function signIn(state: LoginFormState, formData: FormData) {
   // Prepare data for insertion into database
   const { identifier, password } = validatedFields.data;
 
-  const response = await fetch(`${API_URL}/api/local`, {
+  const response = await fetch(`${API_URL}/api/auth/local`, {
     method: "POST",
     body: JSON.stringify({ identifier, password }),
     headers: { "Content-Type": "application/json" },
@@ -105,7 +105,7 @@ export async function signUp(state: RegisterFormState, formData: FormData) {
   // Prepare data for insertion into database
   const { email, username, password } = validatedFields.data;
 
-  const response = await fetch(`${API_URL}/api/local/register`, {
+  const response = await fetch(`${API_URL}/api/auth/local/register`, {
     method: "POST",
     body: JSON.stringify({ email, username, password }),
     headers: { "Content-Type": "application/json" },

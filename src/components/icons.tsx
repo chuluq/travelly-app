@@ -6,9 +6,11 @@ import {
   LucideProps,
   MessagesSquare,
   Newspaper,
+  Pencil,
   PlusCircle,
   Sailboat,
   Tag,
+  Trash2,
   User,
   X,
   type Icon as LucideIcon,
@@ -28,6 +30,8 @@ export const Icons = {
   upload: FileUp,
   arrowRight: ArrowRight,
   create: PlusCircle,
+  delete: Trash2,
+  edit: Pencil,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

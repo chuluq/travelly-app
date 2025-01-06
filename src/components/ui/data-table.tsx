@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,10 +13,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -26,8 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { PATH_ARTICLE } from "@/config/routes";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,8 +32,6 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter();
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -64,21 +56,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="flex items-center py-4 gap-2">
-        <Input
-          placeholder="Filter titles..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <Button onClick={() => router.push(PATH_ARTICLE.create)}>
-          <Icons.create />
-          New
-        </Button>
-      </div>
+    <>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -132,6 +110,6 @@ export function DataTable<TData, TValue>({
       <div className="pt-2">
         <DataTablePagination table={table} />
       </div>
-    </div>
+    </>
   );
 }

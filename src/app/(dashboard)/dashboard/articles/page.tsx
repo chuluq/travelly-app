@@ -10,12 +10,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { ArticleList } from "@/components/articles/list";
 
 import { ArticlePagination } from "@/types/articles";
 import { API_URL } from "@/config/routes";
 import { getSession } from "@/actions/auth";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
 
 export const metadata: Metadata = {
   title: "Article List",
@@ -25,6 +24,7 @@ export const metadata: Metadata = {
 async function getArticles(token: string): Promise<ArticlePagination> {
   const data = await fetch(`${API_URL}/api/articles`, {
     headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
   });
   const articles = await data.json();
 
@@ -57,9 +57,10 @@ export default async function ArticlePage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="container mx-auto  pb-10">
+      <ArticleList articles={articles} />
+      {/* <div className="container mx-auto  pb-10">
         <DataTable columns={columns} data={articles.data ?? []} />
-      </div>
+      </div> */}
     </DashboardShell>
   );
 }

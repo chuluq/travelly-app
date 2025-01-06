@@ -4,7 +4,6 @@ import {
   PATH_CATEGORY,
   PATH_COMMENT,
   PATH_DASHBOARD,
-  PATH_UPLOAD,
 } from "./routes";
 
 export const dashboardConfig: DashboardConfig = {
@@ -40,11 +39,6 @@ export const dashboardConfig: DashboardConfig = {
       title: "Category",
       href: PATH_CATEGORY.list,
       icon: "category",
-    },
-    {
-      title: "Upload",
-      href: PATH_UPLOAD,
-      icon: "upload",
     },
   ],
 };

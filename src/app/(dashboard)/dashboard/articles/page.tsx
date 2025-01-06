@@ -24,7 +24,6 @@ export const metadata: Metadata = {
 async function getArticles(token: string): Promise<ArticlePagination> {
   const data = await fetch(`${API_URL}/api/articles`, {
     headers: { Authorization: `Bearer ${token}` },
-    cache: "no-store",
   });
   const articles = await data.json();
 
@@ -45,10 +44,6 @@ export default async function ArticlePage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -58,9 +53,6 @@ export default async function ArticlePage() {
         </BreadcrumbList>
       </Breadcrumb>
       <ArticleList articles={articles} />
-      {/* <div className="container mx-auto  pb-10">
-        <DataTable columns={columns} data={articles.data ?? []} />
-      </div> */}
     </DashboardShell>
   );
 }

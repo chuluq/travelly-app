@@ -31,5 +31,3 @@ export const PATH_CATEGORY = {
   update: (documentId: string) =>
     `${PATH_DASHBOARD}/categories/${documentId}/update`,
 };
-
-export const PATH_UPLOAD = "/dashboard/upload";

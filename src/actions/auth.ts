@@ -9,7 +9,7 @@ import {
   defaultSession,
   sessionOptions,
 } from "@/lib/session";
-import { API_URL, auth } from "@/config/routes";
+import { API_URL } from "@/config/routes";
 import { LoginSchema, RegisterSchema } from "@/lib/validations/auth";
 
 export type LoginFormState =
@@ -63,7 +63,7 @@ export async function signIn(state: LoginFormState, formData: FormData) {
   // Prepare data for insertion into database
   const { identifier, password } = validatedFields.data;
 
-  const response = await fetch(`${API_URL}/api/${auth.login}`, {
+  const response = await fetch(`${API_URL}/api/local`, {
     method: "POST",
     body: JSON.stringify({ identifier, password }),
     headers: { "Content-Type": "application/json" },
@@ -105,7 +105,7 @@ export async function signUp(state: RegisterFormState, formData: FormData) {
   // Prepare data for insertion into database
   const { email, username, password } = validatedFields.data;
 
-  const response = await fetch(`${API_URL}/api/${auth.register}`, {
+  const response = await fetch(`${API_URL}/api/local/register`, {
     method: "POST",
     body: JSON.stringify({ email, username, password }),
     headers: { "Content-Type": "application/json" },

@@ -1,4 +1,11 @@
 import { DashboardConfig } from "@/types";
+import {
+  PATH_ARTICLE,
+  PATH_CATEGORY,
+  PATH_COMMENT,
+  PATH_DASHBOARD,
+  PATH_UPLOAD,
+} from "./routes";
 
 export const dashboardConfig: DashboardConfig = {
   mainNav: [
@@ -16,27 +23,27 @@ export const dashboardConfig: DashboardConfig = {
   sidebarNav: [
     {
       title: "Dashboard",
-      href: "/dashboard",
+      href: PATH_DASHBOARD,
       icon: "dashboard",
     },
     {
       title: "Articles",
-      href: "/dashboard/articles",
+      href: PATH_ARTICLE.list,
       icon: "article",
     },
     {
       title: "Comments",
-      href: "/dashboard/comments",
+      href: PATH_COMMENT.list,
       icon: "comment",
     },
     {
       title: "Category",
-      href: "/dashboard/category",
+      href: PATH_CATEGORY.list,
       icon: "category",
     },
     {
       title: "Upload",
-      href: "/dashboard/upload",
+      href: PATH_UPLOAD,
       icon: "upload",
     },
   ],

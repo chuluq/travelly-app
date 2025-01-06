@@ -7,7 +7,7 @@ import { UserAccountNav } from "@/components/user-account-nav";
 
 import { getSession } from "@/actions/auth";
 import { dashboardConfig } from "@/config/dashboard";
-import { API_URL, auth } from "@/config/routes";
+import { API_URL } from "@/config/routes";
 import { CounterStoreProvider } from "@/providers/counter-store-provider";
 import { User } from "@/types/user";
 
@@ -16,7 +16,7 @@ interface DashboardLayoutProps {
 }
 
 async function getMe(token: string) {
-  const res = await fetch(`${API_URL}/api/${auth.getMe}`, {
+  const res = await fetch(`${API_URL}/api/users/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

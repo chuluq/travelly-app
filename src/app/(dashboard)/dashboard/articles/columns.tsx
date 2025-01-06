@@ -1,8 +1,8 @@
 "use client";
 
-import { Article } from "@/types/articles";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { Article } from "@/types/articles";
 
 export const columns: ColumnDef<Article>[] = [
   {
@@ -42,7 +43,7 @@ export const columns: ColumnDef<Article>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const article = row.original;
+      const articleRow = row.original;
 
       return (
         <DropdownMenu>
@@ -55,12 +56,18 @@ export const columns: ColumnDef<Article>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(article.documentId)}
+              onClick={() =>
+                navigator.clipboard.writeText(articleRow.documentId)
+              }
             >
               Copy article ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View article details</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/dashboard/articles/${articleRow.documentId}`}>
+                View article details
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

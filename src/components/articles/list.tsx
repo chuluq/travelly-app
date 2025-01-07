@@ -41,6 +41,7 @@ export const ArticleList = () => {
   const { onPaginationChange, pagination, pageIndex, pageSize } =
     usePagination();
 
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [deleteConfirmationDialog, setDeleteConfirmationDialog] =
     React.useState<boolean>(false);
   const [deletedId, setDeletedId] = React.useState<string>("");
@@ -48,8 +49,10 @@ export const ArticleList = () => {
 
   React.useEffect(() => {
     async function fetchArticles() {
-      const articles = await getArticles({ page: pageIndex, pageSize });
+      setIsLoading(true);
+      const articles = await getArticles({ page: pageIndex + 1, pageSize });
       setArticles(articles);
+      setIsLoading(false);
     }
     fetchArticles();
   }, [pageIndex, pageSize]);
@@ -152,7 +155,7 @@ export const ArticleList = () => {
   return (
     <>
       <div className="container mx-auto pb-10">
-        <div>
+        <div className="flex flex-col">
           <div className="flex items-center justify-between py-4">
             <PageTitle title="Article List" />
             <Button onClick={() => router.push(PATH_ARTICLE.create)}>
@@ -166,6 +169,7 @@ export const ArticleList = () => {
               data={articles?.data ?? []}
               pagination={pagination}
               rowCount={articles?.meta?.pagination?.total}
+              isLoading={isLoading}
               onPaginationChange={onPaginationChange}
             />
           )}

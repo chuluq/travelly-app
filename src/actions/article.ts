@@ -16,9 +16,7 @@ export async function getArticles({
   const session = await getSession();
 
   const res = await fetch(
-    `${API_URL}/api/articles?pagination[page]=${
-      page + 1
-    }&pagination[pageSize]=${pageSize}`,
+    `${API_URL}/api/articles?pagination[page]=${page}&pagination[pageSize]=${pageSize}`,
     {
       headers: {
         Authorization: `Bearer ${session.accessToken}`,

@@ -42,6 +42,12 @@ interface ArticleListProps {
 
 export const ArticleList = ({ articles }: ArticleListProps) => {
   const router = useRouter();
+
+  const {
+    data,
+    meta: { pagination },
+  } = articles;
+
   const [deleteConfirmationDialog, setDeleteConfirmationDialog] =
     React.useState<boolean>(false);
   const [deletedId, setDeletedId] = React.useState<string>("");
@@ -153,7 +159,11 @@ export const ArticleList = ({ articles }: ArticleListProps) => {
               New
             </Button>
           </div>
-          <DataTable columns={columns} data={articles.data ?? []} />
+          <DataTable
+            columns={columns}
+            data={data ?? []}
+            pagination={pagination}
+          />
         </div>
       </div>
       <AlertDialog

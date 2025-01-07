@@ -22,9 +22,12 @@ export const metadata: Metadata = {
 };
 
 async function getArticles(token: string): Promise<ArticlePagination> {
-  const data = await fetch(`${API_URL}/api/articles`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const data = await fetch(
+    `${API_URL}/api/articles?pagination[page]=1&pagination[pageSize]=20&populate=*`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   const articles = await data.json();
 
   return articles;

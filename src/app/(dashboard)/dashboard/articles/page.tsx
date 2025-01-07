@@ -12,26 +12,12 @@ import {
 } from "@/components/ui/breadcrumb";
 import { ArticleList } from "@/components/articles/list";
 
-import { ArticlePagination } from "@/types/articles";
-import { API_URL } from "@/config/routes";
 import { getSession } from "@/actions/auth";
 
 export const metadata: Metadata = {
   title: "Article List",
   description: "Lorem ipsum dolor sit amet.",
 };
-
-async function getArticles(token: string): Promise<ArticlePagination> {
-  const data = await fetch(
-    `${API_URL}/api/articles?pagination[page]=1&pagination[pageSize]=20&populate=*`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-  const articles = await data.json();
-
-  return articles;
-}
 
 export default async function ArticlePage() {
   const session = await getSession();

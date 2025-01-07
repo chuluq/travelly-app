@@ -22,8 +22,10 @@ export type Article = {
 export type ArticlePagination = DataPagination<Article>;
 
 export type ArticleForm = {
-  title: string;
-  description: string;
-  cover_image_url: string;
-  category: number;
+  data: {
+    title: string;
+    description: string;
+    cover_image_url: string;
+    category: number;
+  };
 };

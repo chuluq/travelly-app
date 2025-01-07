@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { PageTitle } from "@/components/page-title";
 import { SubmitButton } from "@/components/submit-button";
@@ -26,12 +26,20 @@ import { useAccessToken } from "@/hooks/use-token";
 import { ArticleSchema } from "@/lib/validations/article";
 import { Category } from "@/types/category";
 import { getCategories } from "@/actions/categories";
+import {
+  createArticle,
+  getArticleDetail,
+  getArticles,
+  updateArticle,
+} from "@/actions/article";
+import Image from "next/image";
 
 type FormData = z.infer<typeof ArticleSchema>;
 
 export const CreateArticle = () => {
   const session = useAccessToken();
   const router = useRouter();
+  const { documentId } = useParams();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [imgFile, setImgFile] = React.useState<File | undefined>();
@@ -41,6 +49,7 @@ export const CreateArticle = () => {
     setValue,
     handleSubmit,
     register,
+    getValues,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(ArticleSchema),
@@ -59,6 +68,19 @@ export const CreateArticle = () => {
     }
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    async function fetchArticle() {
+      const article = await getArticleDetail(String(documentId));
+      setValue("title", article.data.title ?? "");
+      setValue("description", article.data.description ?? "");
+      setValue("coverImg", article.data.cover_image_url ?? "");
+      setValue("category", article.data.category ?? "");
+    }
+    if (documentId) {
+      fetchArticle();
+    }
+  }, [documentId]);
 
   function onChangeFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
@@ -100,20 +122,14 @@ export const CreateArticle = () => {
           title: values.title,
           description: values.description,
           cover_image_url: values.coverImg,
-          category: Number(values.category),
+          category: Number(values.category) ?? null,
         },
       };
 
-      const res = await fetch(`${API_URL}/api/articles`, {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-      });
-      if (res.ok) {
-        router.push(PATH_ARTICLE.list);
+      if (!documentId) {
+        await createArticle(payload);
+      } else {
+        await updateArticle(String(documentId), payload);
       }
     } catch (error) {
       console.error(error);
@@ -124,7 +140,9 @@ export const CreateArticle = () => {
 
   return (
     <div className="space-y-8">
-      <PageTitle title="Create a new article" />
+      <PageTitle
+        title={documentId ? "Update an article" : "Create a new article"}
+      />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4 w-full lg:max-w-screen-sm">
           <div className="grid gap-4">
@@ -140,6 +158,14 @@ export const CreateArticle = () => {
                   disabled={isLoading}
                   onChange={onChangeFile}
                 />
+                {getValues().coverImg ? (
+                  <Image
+                    alt="preview"
+                    src={getValues().coverImg}
+                    width={50}
+                    height={50}
+                  />
+                ) : null}
                 <Button onClick={onUploadFile} disabled={isLoading}>
                   {isLoading && (
                     <Icons.loading className="mr-2 size-4 animate-spin" />
@@ -207,7 +233,9 @@ export const CreateArticle = () => {
               )}
             </div>
           </div>
-          <SubmitButton text="Create article" />
+          <SubmitButton
+            text={documentId ? "Update article" : "Create article"}
+          />
         </div>
       </form>
     </div>

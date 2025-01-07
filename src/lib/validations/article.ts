@@ -15,6 +15,5 @@ export const ArticleSchema = z.object({
     .nonempty({ message: "Cover Image is required" }),
   category: z
     .string({ required_error: "Category is required" })
-    .trim()
     .nonempty({ message: "Category is required" }),
 });

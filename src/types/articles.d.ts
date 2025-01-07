@@ -1,6 +1,7 @@
 import { DataPagination } from "@/types";
 import { Comment } from "@/types/comment";
 import { User } from "@/types/user";
+import { Category } from "@/types/category";
 
 export type Article = {
   id: number;
@@ -13,7 +14,7 @@ export type Article = {
   publishedAt: Date;
   locale: null;
   user: User;
-  category: number | null;
+  category: Category | null;
   comments: Comment[];
   localizations: string[];
 };

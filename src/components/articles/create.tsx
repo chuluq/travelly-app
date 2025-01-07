@@ -1,9 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 import { PageTitle } from "@/components/page-title";
 import { SubmitButton } from "@/components/submit-button";
@@ -11,12 +12,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Icons } from "@/components/icons";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { API_URL, PATH_ARTICLE } from "@/config/routes";
 import { useAccessToken } from "@/hooks/use-token";
 import { ArticleSchema } from "@/lib/validations/article";
-import { Icons } from "../icons";
-import { useRouter } from "next/navigation";
+import { Category } from "@/types/category";
+import { getCategories } from "@/actions/categories";
 
 type FormData = z.infer<typeof ArticleSchema>;
 
@@ -26,6 +35,7 @@ export const CreateArticle = () => {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [imgFile, setImgFile] = React.useState<File | undefined>();
+  const [categories, setCategories] = React.useState<Category[]>([]);
 
   const {
     setValue,
@@ -41,6 +51,14 @@ export const CreateArticle = () => {
       category: "",
     },
   });
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const categories = await getCategories();
+      setCategories(categories.data);
+    }
+    fetchCategories();
+  }, []);
 
   function onChangeFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
@@ -82,9 +100,10 @@ export const CreateArticle = () => {
           title: values.title,
           description: values.description,
           cover_image_url: values.coverImg,
-          category: null,
+          category: Number(values.category),
         },
       };
+
       const res = await fetch(`${API_URL}/api/articles`, {
         method: "POST",
         body: JSON.stringify(payload),
@@ -169,15 +188,18 @@ export const CreateArticle = () => {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="category">Category</Label>
-              <Input
-                id="category"
-                placeholder="some category"
-                type="text"
-                autoCapitalize="none"
-                autoCorrect="off"
-                disabled={isLoading}
-                {...register("category")}
-              />
+              <Select onValueChange={(id) => setValue("category", id)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories?.map((category, index) => (
+                    <SelectItem value={category.id.toString()} key={index}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {errors?.category && (
                 <p className="px-1 text-xs text-red-600">
                   {errors.category.message}

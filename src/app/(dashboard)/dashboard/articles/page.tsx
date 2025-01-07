@@ -40,8 +40,6 @@ export default async function ArticlePage() {
     redirect("/login");
   }
 
-  const articles = await getArticles(session.accessToken);
-
   return (
     <DashboardShell className="px-2">
       <Breadcrumb>
@@ -55,7 +53,7 @@ export default async function ArticlePage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <ArticleList articles={articles} />
+      <ArticleList />
     </DashboardShell>
   );
 }

@@ -33,20 +33,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { PATH_ARTICLE } from "@/config/routes";
-import { Article, ArticlePagination } from "@/types/articles";
+import { Article } from "@/types/articles";
 import { deleteArticle } from "@/actions/article";
+import { usePagination } from "@/hooks/use-pagination";
+import { useArticles } from "@/hooks/use-articles";
 
-interface ArticleListProps {
-  articles: ArticlePagination;
-}
-
-export const ArticleList = ({ articles }: ArticleListProps) => {
+export const ArticleList = () => {
   const router = useRouter();
+  const { onPaginationChange, pagination, pageIndex, pageSize } =
+    usePagination();
+  const { articles } = useArticles({
+    page: pageIndex,
+    pageSize,
+  });
 
-  const {
-    data,
-    meta: { pagination },
-  } = articles;
+  console.log("list", pageIndex);
 
   const [deleteConfirmationDialog, setDeleteConfirmationDialog] =
     React.useState<boolean>(false);
@@ -159,11 +160,15 @@ export const ArticleList = ({ articles }: ArticleListProps) => {
               New
             </Button>
           </div>
-          <DataTable
-            columns={columns}
-            data={data ?? []}
-            pagination={pagination}
-          />
+          {articles && (
+            <DataTable
+              columns={columns}
+              data={articles?.data ?? []}
+              pagination={pagination}
+              rowCount={articles?.meta?.pagination?.total}
+              onPaginationChange={onPaginationChange}
+            />
+          )}
         </div>
       </div>
       <AlertDialog

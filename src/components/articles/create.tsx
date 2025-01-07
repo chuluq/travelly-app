@@ -1,31 +1,36 @@
 "use client";
 
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { PageTitle } from "@/components/page-title";
 import { SubmitButton } from "@/components/submit-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "../ui/button";
 
+import { API_URL, PATH_ARTICLE } from "@/config/routes";
+import { useAccessToken } from "@/hooks/use-token";
 import { ArticleSchema } from "@/lib/validations/article";
-import { API_URL } from "@/config/routes";
-import { defaultSession, SessionData } from "@/lib/session";
+import { Icons } from "../icons";
+import { useRouter } from "next/navigation";
 
 type FormData = z.infer<typeof ArticleSchema>;
 
 export const CreateArticle = () => {
-  const [session, setSession] = React.useState<SessionData>(defaultSession);
+  const session = useAccessToken();
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [imgFile, setImgFile] = React.useState<File | undefined>();
 
   const {
     setValue,
     handleSubmit,
+    register,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(ArticleSchema),
@@ -36,16 +41,6 @@ export const CreateArticle = () => {
       category: "",
     },
   });
-
-  React.useEffect(() => {
-    setIsLoading(true);
-    fetch("/api/session")
-      .then((res) => res.json())
-      .then((session) => {
-        setSession(session);
-        setIsLoading(false);
-      });
-  }, []);
 
   function onChangeFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
@@ -60,6 +55,7 @@ export const CreateArticle = () => {
     }
 
     try {
+      setIsLoading(true);
       const res = await fetch(`${API_URL}/api/upload`, {
         method: "POST",
         body: formData,
@@ -73,13 +69,38 @@ export const CreateArticle = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  function onSubmit(values: FormData) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: FormData) {
+    try {
+      setIsLoading(true);
+      const payload = {
+        data: {
+          title: values.title,
+          description: values.description,
+          cover_image_url: values.coverImg,
+          category: null,
+        },
+      };
+      const res = await fetch(`${API_URL}/api/articles`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      });
+      if (res.ok) {
+        router.push(PATH_ARTICLE.list);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -93,13 +114,19 @@ export const CreateArticle = () => {
               <div className="flex items-center gap-2">
                 <Input
                   id="coverImg"
+                  // name="coverImg"
                   placeholder="upload image"
                   type="file"
                   accept="image/*"
                   disabled={isLoading}
                   onChange={onChangeFile}
                 />
-                <Button onClick={onUploadFile}>Upload</Button>
+                <Button onClick={onUploadFile} disabled={isLoading}>
+                  {isLoading && (
+                    <Icons.loading className="mr-2 size-4 animate-spin" />
+                  )}
+                  Upload
+                </Button>
               </div>
               {errors?.coverImg && (
                 <p className="px-1 text-xs text-red-600">
@@ -111,12 +138,12 @@ export const CreateArticle = () => {
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
-                name="title"
                 placeholder="some title"
                 type="text"
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                {...register("title")}
               />
               {errors?.title && (
                 <p className="px-1 text-xs text-red-600">
@@ -128,11 +155,11 @@ export const CreateArticle = () => {
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
-                name="description"
                 placeholder="put some description here..."
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                {...register("description")}
               />
               {errors?.description && (
                 <p className="px-1 text-xs text-red-600">
@@ -144,12 +171,12 @@ export const CreateArticle = () => {
               <Label htmlFor="category">Category</Label>
               <Input
                 id="category"
-                name="category"
                 placeholder="some category"
                 type="text"
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                {...register("category")}
               />
               {errors?.category && (
                 <p className="px-1 text-xs text-red-600">

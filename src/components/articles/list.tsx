@@ -22,7 +22,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTable } from "@/components/ui/data-table";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,25 +32,27 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { PATH_ARTICLE } from "@/config/routes";
-import { Article } from "@/types/articles";
-import { deleteArticle } from "@/actions/article";
+import { Article, ArticlePagination } from "@/types/articles";
+import { deleteArticle, getArticles } from "@/actions/article";
 import { usePagination } from "@/hooks/use-pagination";
-import { useArticles } from "@/hooks/use-articles";
 
 export const ArticleList = () => {
   const router = useRouter();
   const { onPaginationChange, pagination, pageIndex, pageSize } =
     usePagination();
-  const { articles } = useArticles({
-    page: pageIndex,
-    pageSize,
-  });
-
-  console.log("list", pageIndex);
 
   const [deleteConfirmationDialog, setDeleteConfirmationDialog] =
     React.useState<boolean>(false);
   const [deletedId, setDeletedId] = React.useState<string>("");
+  const [articles, setArticles] = React.useState<ArticlePagination>();
+
+  React.useEffect(() => {
+    async function fetchArticles() {
+      const articles = await getArticles({ page: pageIndex, pageSize });
+      setArticles(articles);
+    }
+    fetchArticles();
+  }, [pageIndex, pageSize]);
 
   const columns: ColumnDef<Article>[] = [
     {
@@ -75,6 +76,20 @@ export const ArticleList = () => {
       ),
       enableSorting: false,
       enableHiding: false,
+    },
+
+    {
+      accessorKey: "title",
+      header: "Title",
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Created At",
+      cell: ({ getValue }) => format(getValue() as string, "dd MMM yyyy"),
     },
     {
       id: "actions",
@@ -106,10 +121,10 @@ export const ArticleList = () => {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Button asChild>
+                <Button asChild size="sm" className="w-full">
                   <Link href={PATH_ARTICLE.update(articleRow.documentId)}>
                     <Icons.edit />
-                    Edit article
+                    Edit
                   </Link>
                 </Button>
               </DropdownMenuItem>
@@ -131,21 +146,6 @@ export const ArticleList = () => {
           </DropdownMenu>
         );
       },
-    },
-    {
-      accessorKey: "title",
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Title" />;
-      },
-    },
-    {
-      accessorKey: "description",
-      header: "Description",
-    },
-    {
-      accessorKey: "createdAt",
-      header: "Created At",
-      cell: ({ getValue }) => format(getValue() as string, "dd MMM yyyy"),
     },
   ];
 
@@ -186,7 +186,9 @@ export const ArticleList = () => {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={async () => await deleteArticle(deletedId)}
+              onClick={async () => {
+                await deleteArticle(deletedId);
+              }}
             >
               Delete
             </AlertDialogAction>

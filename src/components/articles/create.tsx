@@ -1,10 +1,11 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useParams, useRouter } from "next/navigation";
 
 import { PageTitle } from "@/components/page-title";
 import { SubmitButton } from "@/components/submit-button";
@@ -21,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { API_URL, PATH_ARTICLE } from "@/config/routes";
+import { API_URL } from "@/config/routes";
 import { useAccessToken } from "@/hooks/use-token";
 import { ArticleSchema } from "@/lib/validations/article";
 import { Category } from "@/types/category";
@@ -29,16 +30,13 @@ import { getCategories } from "@/actions/categories";
 import {
   createArticle,
   getArticleDetail,
-  getArticles,
   updateArticle,
 } from "@/actions/article";
-import Image from "next/image";
 
 type FormData = z.infer<typeof ArticleSchema>;
 
 export const CreateArticle = () => {
   const session = useAccessToken();
-  const router = useRouter();
   const { documentId } = useParams();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -80,7 +78,7 @@ export const CreateArticle = () => {
     if (documentId) {
       fetchArticle();
     }
-  }, [documentId]);
+  }, [documentId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function onChangeFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {

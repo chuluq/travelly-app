@@ -35,7 +35,6 @@ import { PATH_ARTICLE } from "@/config/routes";
 import { Article, ArticlePagination } from "@/types/articles";
 import { deleteArticle, getArticles } from "@/actions/article";
 import { usePagination } from "@/hooks/use-pagination";
-import { TableSkeleton } from "../table-skeleton";
 
 export const ArticleList = () => {
   const router = useRouter();

@@ -61,6 +61,9 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
+      backgroundImage: {
+        "not-found": "url('../assets/background.png')",
+      },
     },
   },
   plugins: [animate],

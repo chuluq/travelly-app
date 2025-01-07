@@ -13,7 +13,7 @@ import { UserAvatar } from "@/components/user-avatar";
 
 import { User } from "@/types/user";
 import { signOut } from "@/actions/auth";
-import { PATH_ARTICLE, PATH_DASHBOARD } from "@/config/routes";
+import { PATH_ARTICLE, PATH_COMMENT, PATH_DASHBOARD } from "@/config/routes";
 
 interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
   user: Pick<User, "username" | "image" | "email">;
@@ -45,6 +45,9 @@ export const UserAccountNav = ({ user }: UserAccountNavProps) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href={PATH_ARTICLE.list}>Articles</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={PATH_COMMENT.list}>Comments</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem

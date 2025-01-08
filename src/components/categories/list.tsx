@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { PATH_ARTICLE, PATH_CATEGORY } from "@/config/routes";
+import { PATH_CATEGORY } from "@/config/routes";
 import { getCategories } from "@/actions/categories";
 import { Category, CategoryPagination } from "@/types/category";
 
@@ -115,18 +115,18 @@ export const CategoryList = () => {
                   navigator.clipboard.writeText(categoryRow.documentId)
                 }
               >
-                Copy article ID
+                Copy category ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Link href={PATH_ARTICLE.detail(categoryRow.documentId)}>
-                  View article details
+                <Link href={PATH_CATEGORY.detail(categoryRow.documentId)}>
+                  View category details
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <Button asChild size="sm" className="w-full">
-                  <Link href={PATH_ARTICLE.update(categoryRow.documentId)}>
+                  <Link href={PATH_CATEGORY.update(categoryRow.documentId)}>
                     <Icons.edit />
                     Edit
                   </Link>

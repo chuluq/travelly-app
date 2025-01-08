@@ -30,9 +30,9 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   rowCount: number;
-  pagination: PaginationState;
+  pagination?: PaginationState;
   isLoading?: boolean;
-  onPaginationChange: OnChangeFn<PaginationState>;
+  onPaginationChange?: OnChangeFn<PaginationState>;
 }
 
 export function DataTable<TData, TValue>({
@@ -128,9 +128,11 @@ export function DataTable<TData, TValue>({
           </Table>
         </div>
       )}
-      <div className="pt-2">
-        <DataTablePagination table={table} isLoading={isLoading} />
-      </div>
+      {pagination && (
+        <div className="pt-2">
+          <DataTablePagination table={table} isLoading={isLoading} />
+        </div>
+      )}
     </>
   );
 }

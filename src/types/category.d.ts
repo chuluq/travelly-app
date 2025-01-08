@@ -8,3 +8,5 @@ export type Category = {
   publishedAt: Date;
   locale: null;
 };
+
+export type CategoryPagination = DataPagination<Category>;

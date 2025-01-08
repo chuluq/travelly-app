@@ -192,6 +192,7 @@ export const ArticleList = () => {
             <AlertDialogAction
               onClick={async () => {
                 await deleteArticle(deletedId);
+                router.refresh();
               }}
             >
               Delete

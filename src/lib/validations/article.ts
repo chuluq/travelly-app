@@ -24,3 +24,10 @@ export const CommentSchema = z.object({
     .trim()
     .nonempty({ message: "Comment is required" }),
 });
+
+export const CategorySchema = z.object({
+  name: z
+    .string({ required_error: "Comment is required" })
+    .trim()
+    .nonempty({ message: "Comment is required" }),
+});

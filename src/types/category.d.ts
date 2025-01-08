@@ -10,3 +10,9 @@ export type Category = {
 };
 
 export type CategoryPagination = DataPagination<Category>;
+
+export type CategoryForm = {
+  data: {
+    name: string;
+  };
+};

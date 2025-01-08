@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { PATH_CATEGORY } from "@/config/routes";
-import { getCategories } from "@/actions/categories";
+import { deleteCategory, getCategories } from "@/actions/categories";
 import { Category, CategoryPagination } from "@/types/category";
 
 export const CategoryList = () => {
@@ -190,8 +190,8 @@ export const CategoryList = () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
-                // await deleteCategory(deletedId);
-                console.log(deletedId);
+                await deleteCategory(deletedId);
+                router.refresh();
               }}
             >
               Delete

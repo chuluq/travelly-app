@@ -2,8 +2,11 @@ import { type Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Icons } from "@/components/icons";
 import { LoginForm } from "@/components/auth/login-form";
+
 import { getSession } from "@/actions/auth";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -20,7 +23,10 @@ export default async function LoginPage() {
   return (
     <div className="container flex h-screen w-screen flex-col">
       <div className="flex flex-col pt-[18px] px-7 pb-12 space-y-10 lg:space-y-40">
-        <h4 className="text-lg font-semibold">Your Logo</h4>
+        <div className="flex space-x-2 items-center">
+          <Icons.logo />
+          <h4 className="text-lg font-semibold">{siteConfig.name}</h4>
+        </div>
         <div className="w-full lg:max-w-screen-md grid lg:grid-cols-[1fr_369px] items-start lg:items-center lg:mx-auto gap-12">
           <div className="space-y-8">
             <div className="flex flex-col gap-y-1">

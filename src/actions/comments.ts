@@ -65,7 +65,7 @@ export async function createComment(payload: CommentForm) {
   try {
     const session = await getSession();
 
-    const res = await fetch(`${API_URL}/api/comments`, {
+    await fetch(`${API_URL}/api/comments`, {
       method: "POST",
       body: JSON.stringify(payload),
       headers: {
@@ -73,9 +73,6 @@ export async function createComment(payload: CommentForm) {
         Authorization: `Bearer ${session.accessToken}`,
       },
     });
-    const comment = await res.json();
-
-    console.log(comment);
   } catch (error) {
     console.error(error);
     throw new Error("An error occured while mutating data");

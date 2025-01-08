@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +14,6 @@ import { Icons } from "@/components/icons";
 
 import { Article } from "@/types/articles";
 import { CommentSchema } from "@/lib/validations/article";
-import React from "react";
 import { createComment } from "@/actions/comments";
 
 interface DetailArticleProps {

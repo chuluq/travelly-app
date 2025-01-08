@@ -17,3 +17,10 @@ export const ArticleSchema = z.object({
     .string({ required_error: "Category is required" })
     .nonempty({ message: "Category is required" }),
 });
+
+export const CommentSchema = z.object({
+  content: z
+    .string({ required_error: "Comment is required" })
+    .trim()
+    .nonempty({ message: "Comment is required" }),
+});

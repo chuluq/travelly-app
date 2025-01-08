@@ -1,10 +1,5 @@
 import { DashboardConfig } from "@/types";
-import {
-  PATH_ARTICLE,
-  PATH_CATEGORY,
-  PATH_COMMENT,
-  PATH_DASHBOARD,
-} from "./routes";
+import { PATH_ARTICLE, PATH_CATEGORY, PATH_DASHBOARD } from "./routes";
 
 export const dashboardConfig: DashboardConfig = {
   mainNav: [
@@ -29,11 +24,6 @@ export const dashboardConfig: DashboardConfig = {
       title: "Articles",
       href: PATH_ARTICLE.list,
       icon: "article",
-    },
-    {
-      title: "Comments",
-      href: PATH_COMMENT.list,
-      icon: "comment",
     },
     {
       title: "Category",

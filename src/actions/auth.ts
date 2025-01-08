@@ -128,3 +128,15 @@ export const signOut = async () => {
   session.destroy();
   redirect("/login");
 };
+
+export async function getMe() {
+  const session = await getSession();
+  const res = await fetch(`${API_URL}/api/users/me`, {
+    headers: {
+      Authorization: `Bearer ${session.accessToken}`,
+    },
+  });
+  const user = await res.json();
+
+  return user;
+}

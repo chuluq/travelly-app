@@ -7,3 +7,12 @@ export type Comment = {
   publishedAt: Date;
   locale: null;
 };
+
+export type CommentPagination = DataPagination<Comment>;
+
+export type CommentForm = {
+  data: {
+    content: string;
+    article: number;
+  };
+};

@@ -5,25 +5,13 @@ import { DashboardNav } from "@/components/nav";
 import { SiteFooter } from "@/components/site-footer";
 import { UserAccountNav } from "@/components/user-account-nav";
 
-import { getSession } from "@/actions/auth";
+import { getMe, getSession } from "@/actions/auth";
 import { dashboardConfig } from "@/config/dashboard";
-import { API_URL } from "@/config/routes";
 import { CounterStoreProvider } from "@/providers/counter-store-provider";
 import { User } from "@/types/user";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
-}
-
-async function getMe(token: string) {
-  const res = await fetch(`${API_URL}/api/users/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const user = await res.json();
-
-  return user;
 }
 
 export default async function DashboardLayout({
@@ -35,7 +23,7 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  const user = (await getMe(session.accessToken as string)) as User;
+  const user = (await getMe()) as User;
 
   return (
     <CounterStoreProvider>
